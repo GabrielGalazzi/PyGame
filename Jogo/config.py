@@ -8,8 +8,10 @@ BLOCK_LAYER = 2
 GROUND_LAYER = 1
 
 PLAYER_SPEED = 3
+
 VERMELHO = (255, 0 , 0)
 PRETO = (0, 0, 0)
+BRANCO = (255, 255, 255)
 
 
 tilemap = [

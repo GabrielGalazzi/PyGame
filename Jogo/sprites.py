@@ -5,9 +5,9 @@ from random import randint
 
 
 
-
 class items(py.sprite.Sprite):
     pocao = {'cura': 50, 'dano': 10}
+
 
 class talentos(py.sprite.Sprite):
     inimigos_derrotados = 0
@@ -29,6 +29,7 @@ class inimigos(py.sprite.Sprite):
     {'vida' : 500,'vidamax':500, 'forca':50, 'defesa': 25, 'agilidade': 5}]
     # ordem lista = sergio; andre; maciel; caue; pelicano; marcos
 
+
 class spritesheet:
     def  __init__ (self, file):
         self.sheet = py.image.load(file).convert()
@@ -38,6 +39,7 @@ class spritesheet:
         sprite.blit(self.sheet, (0,0), (x, y, width, height))
         sprite.set_colorkey(PRETO)
         return sprite
+
 
 class personagem (py.sprite.Sprite): 
     habilidades = {'vida' : (100 + talentos.vidaadicional),'vidamax':100, 'forca': talentos.dano, 'defesa': talentos.defesa, 'agilidade': 0}
@@ -69,7 +71,9 @@ class personagem (py.sprite.Sprite):
         self.movimento()
 
         self.rect.x += self.x_change
+        self.colisao('x')
         self.rect.y += self.y_change
+        self.colisao('y')
 
         self.x_change = 0
         self.y_change = 0
@@ -89,6 +93,23 @@ class personagem (py.sprite.Sprite):
             self.y_change += PLAYER_SPEED
             self.facing = 'down'
 
+    def colisao (self, direcao):
+        if direcao == 'x':
+            hits = py.sprite.spritecollide(self, self.game.blocks, False)
+            if hits:
+                if self.x_change > 0:
+                    self.rect.x = hits[0].rect.left - self.rect.width
+                if self.x_change < 0:
+                    self.rect.x = hits[0].rect.right
+        if direcao == 'y':
+            hits = py.sprite.spritecollide(self, self.game.blocks, False)
+            if hits:
+                if self.y_change > 0:
+                    self.rect.y = hits[0].rect.top - self.rect.height
+                if self.y_change < 0:
+                    self.rect.y = hits[0].rect.bottom
+
+
 class block (py.sprite.Sprite):
     def __init__(self, game, x, y):
 
@@ -102,11 +123,12 @@ class block (py.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        self.image = self.game.arvore_spritesheet.get_sprite(0, 448, self.width, self.height)
+        self.image = self.game.terreno_spritesheet.get_sprite(968, 448, self.width, self.height) #PEDRA BLOCK
 
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+
 
 class chao (py.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -120,4 +142,40 @@ class chao (py.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-    #    self.image = self.game.
+        self.image = self.game.terreno_spritesheet.get_sprite(64, 362, self.width, self.height) #GRAMA CHAO
+
+        self.rect = self.image.get_rect
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+
+class botao:
+    def __init__(self, x, y, width, height, fg, bg, content, fontsize):
+        self.font = py.font.Font('arial.ttf', fontsize)
+        self.content = content
+
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+        self.fg = fg
+        self.bg = bg
+
+        self.image = py.Surface((self.width, self.height))
+        self.image.fill(self.bg)
+        self.rect = self.image.get_rect()
+
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+        self.text = self.font.render(self.content, True, self.fg)
+        self.text_rect = self.text.get_rect(center=(self.width/2, self.height/2))
+        self.image.blit(self.text, self.text_rect)
+
+    def is_pressed(self, pos, pressed):
+        if self.rect.collidepoint(pos):
+            if pressed[0]:
+                return True
+            return False
+        return False
