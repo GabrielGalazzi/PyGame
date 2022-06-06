@@ -1,7 +1,7 @@
 import pygame as py
 from sys import *
 from math import *
-from random import choice
+from random import randint
 
 
 
