@@ -11,7 +11,7 @@ class Jogo:
         self.screen = py.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = py.time.Clock()
         self.running = True
-        self.font = py.font.Font('arial.ttf', 32)
+        self.font = py.font.SysFont('Arial', 32)
 
         self.character_spritesheet = spritesheet('Personagem/fafa _sprite.png')
         self.terreno_spritesheet = spritesheet("Terreno/arvore.png")
@@ -26,6 +26,36 @@ class Jogo:
                     block(self, k, i)
                 if column == 'P':
                     personagem(self, k, i)
+                if column == 'S':
+                    inimigo1(self, k, i)
+                if column == 'A':
+                    inimigo2(self, k, i)
+                if column == 'M':
+                    inimigo3(self, k, i)
+                if column == 'C':
+                    inimigo4(self, k, i)
+                if column == 'P':
+                    inimigo5(self, k, i)
+                if column == 'L':
+                    inimigo6(self, k, i)
+                if column == 'b': #Ponte
+                    if INIMIGO_MORTO <= 1:
+                        py.image.load('./Terreno/ponte_queb_p.png')
+                    else:
+                        py.image.load('./Terreno/ponte_int_p.png')
+                if column == 'c': #Barco
+                    py.image.load('./Terreno/boat_p.png')
+                if column == 'd': #Alfandega
+                    py.image.load('./Terreno/alfandega_p.png')
+                if column == 'b': #Porta
+                    if INIMIGO_MORTO <= 5: 
+                        py.image.load('./Terreno/porta_f_p.png')
+                    else:
+                        py.image.load('./Terreno/porta_a_p.png')
+                
+                
+                
+
 
 
     def new(self):
@@ -91,7 +121,7 @@ class Jogo:
 
     def intro_screen (self): 
         intro = True
-        self.font = py.font.Font('arial.ttf', 32) ## 14
+        self.font = py.font.SysFont('Arial', 32) ## 14
 
         title = self.font.render('Jogo Projeto PYGAME', True, PRETO) #09
         title_rect = title.get_rect(x=10, y=10) 
@@ -125,31 +155,3 @@ while j.running:
 
 py.quit()
 sys.exit()
-
-
-# ----- Gera tela principal
-window = py.display.set_mode((500, 400))
-py.display.set_caption('Hello World!')
-
-# ----- Inicia estruturas de dados
-game = True
-
-# ===== Loop principal =====
-while game:
-    # ----- Trata eventos
-    for event in py.event.get():
-        # ----- Verifica consequências
-        if event.type == py.QUIT:
-            game = False
-
-    # ----- Gera saídas
-    window.fill((255, 255, 255))  # Preenche com a cor branca
-    cor = (255, 0, 0)
-    vertices = [(250, 0), (500, 200), (250, 400), (0, 200)]
-    py.draw.polygon(window, cor, vertices)
-
-    # ----- Atualiza estado do jogo
-    py.display.update()  # Mostra o novo frame para o jogador
-
-# ===== Finalização =====
-py.quit()
