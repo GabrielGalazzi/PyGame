@@ -4,7 +4,7 @@ from sprites import *
 import sys
 
 
-
+py.init()
 class Jogo:
     def _init_(self):
         py.init()
@@ -14,15 +14,16 @@ class Jogo:
         self.running = True
         self.font = py.font.SysFont('Arial', 32)
 
-        self.character_spritesheet = spritesheet('Personagem/fafa _sprite.png')
-        self.terreno_spritesheet = spritesheet("Terreno/arvore.png")
+        #self.character_spritesheet = spritesheet('Personagem/fafa _sprite.png')
+        #self.terreno = py.image.load("./Terreno/terreno.png")
         self.intro_bg = py.image.load('./BGs/introbackground.png')
         self.go_bg = py.image.load('./BGs/gameover.png')
 
     def createTilemap (self):
         for i, row in enumerate(tilemap):
             for k, column in enumerate(row):
-                chao(self, k, i)
+                if column == '.':
+                    chao(self, k, i)
                 if column == 'B':
                     block(self, k, i)
                 if column == 'P':
@@ -54,11 +55,6 @@ class Jogo:
                     else:
                         py.image.load('./Terreno/porta_a_p.png')
                 
-                
-                
-
-
-
     def new(self):
         # Define um novo jogo
         self.playing = True
@@ -104,9 +100,13 @@ class Jogo:
 
         restart_button = botao(10, WIN_HEIGHT-60, 120, 50, BRANCO, PRETO, 'Jogar de novo', 32)
 
-        for event in py.event.get():
-            if event.type == py.QUIT:
-                self.running = False
+        for sprite in self.all_sprites:
+            sprite.kill()
+        
+        while self.running:
+            for event in py.event.get():
+                if event.type == py.QUIT:
+                    self.running = False
 
         mouse_pos = py.mouse.get_pos()
         mouse_press = py.mouse.get_pressed()
@@ -122,6 +122,7 @@ class Jogo:
 
     def intro_screen (self): 
         intro = True
+        py.font.init()
         self.font = py.font.SysFont('Arial', 32) ## 14
 
         title = self.font.render('Jogo Projeto PYGAME', True, PRETO) #09

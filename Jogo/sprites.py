@@ -3,6 +3,8 @@ from config import *
 from math import *
 from random import randint
 
+from sqlalchemy import false
+
 
 class combate(py.sprite.Sprite):
     if combate1 == True:
@@ -45,7 +47,7 @@ class combate(py.sprite.Sprite):
                 INIMIGO_MORTO +=1
                 TURNO = 'personagem'
             elif vida_p<=0:
-                py.quit # mandar pra tela de game over dps
+                self.game.playing = False # mandar pra tela de game over dps
 
 class items(py.sprite.Sprite):
     pocao = {'cura': 50, 'dano': 10}
@@ -79,7 +81,7 @@ class inimigo1(py.sprite.Sprite):
 
         self.image = py.image.load('./Inimigos/sergio.png')
     
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
@@ -102,7 +104,7 @@ class inimigo2(py.sprite.Sprite):
 
         self.image = py.image.load('./Inimigos/andre.png')
 
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
@@ -125,7 +127,7 @@ class inimigo3(py.sprite.Sprite):
 
         self.image = py.image.load('./Inimigos/maciel.png')
 
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
@@ -148,7 +150,7 @@ class inimigo4(py.sprite.Sprite):
 
         self.image = py.image.load('./Inimigos/caue.png')
 
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
@@ -161,7 +163,7 @@ class inimigo5(py.sprite.Sprite):
 
         self.game = game
         self._layer = ENEMY_LAYER
-        self.groups = self.game.all_sprites, self.game.enemies
+        self.groups = self.game.all_sprites, self.game.inimigos
         py.sprite.Sprite.__init__(self, self.groups)
 
         self.x = x * TILESIZE
@@ -171,7 +173,7 @@ class inimigo5(py.sprite.Sprite):
 
         self.image = py.image.load('./Inimigos/pelicano.png')
 
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
@@ -193,7 +195,7 @@ class inimigo6(py.sprite.Sprite):
 
         self.image = py.image.load('./Inimigos/marcos.png')
 
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
@@ -228,8 +230,10 @@ class personagem (py.sprite.Sprite):
         self.y_change = 0
 
         self.facing = 'down'
+        
+        self.image = py.image.load('Personagem/fafa pronto 8 bits2.png')
 
-        self.image = self.game.character_spritesheet.get_sprite(game , 0, 0 , self.width, self.height+90)
+        #self.image = self.game.character_spritesheet.get_sprite(game , 0, 0 , self.width, self.height+90)
 
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -243,22 +247,30 @@ class personagem (py.sprite.Sprite):
         self.colisao('x')
         self.rect.y += self.y_change
         self.colisao('y')
-
+        
         self.x_change = 0
         self.y_change = 0
 
     def movimento (self):
         chaves = py.key.get_pressed()
         if chaves[py.K_LEFT]:
+            for sprite in self.game.all_sprites:
+                sprite.rect.x += PLAYER_SPEED
             self.x_change -= PLAYER_SPEED
             self.facing = 'left'
         if chaves[py.K_RIGHT]:
+            for sprite in self.game.all_sprites:
+                sprite.rect.x -= PLAYER_SPEED
             self.x_change += PLAYER_SPEED
             self.facing = 'right'
         if chaves[py.K_UP]:
+            for sprite in self.game.all_sprites:
+                sprite.rect.y += PLAYER_SPEED
             self.y_change -= PLAYER_SPEED
             self.facing = 'up'
         if chaves[py.K_DOWN]:
+            for sprite in self.game.all_sprites:
+                sprite.rect.y -= PLAYER_SPEED
             self.y_change += PLAYER_SPEED
             self.facing = 'down'
 
@@ -298,15 +310,24 @@ class personagem (py.sprite.Sprite):
             if hits:
                 if self.x_change > 0:
                     self.rect.x = hits[0].rect.left - self.rect.width
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.x += PLAYER_SPEED
                 if self.x_change < 0:
                     self.rect.x = hits[0].rect.right
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.x -= PLAYER_SPEED
+                    
         if direcao == 'y':
             hits = py.sprite.spritecollide(self, self.game.blocks, False)
             if hits:
                 if self.y_change > 0:
                     self.rect.y = hits[0].rect.top - self.rect.height
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.y += PLAYER_SPEED
                 if self.y_change < 0:
                     self.rect.y = hits[0].rect.bottom
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.x -= PLAYER_SPEED
 
 
 class block (py.sprite.Sprite):
@@ -316,13 +337,16 @@ class block (py.sprite.Sprite):
         self._layer = BLOCK_LAYER
         self.groups = self.game.all_sprites, self.game.blocks
         py.sprite.Sprite.__init__(self, self.groups)
-
+        
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.width = TILESIZE
         self.height = TILESIZE
-
-        self.image = self.game.arvore_pronta.load.image(64, 64, self.width, self.height) #PEDRA BLOCK
+        
+        #self.arvore = py.image.load('Jogo/arvore_pronta.png')
+        self.image = py.image.load('Terreno/arvore_pronta.png')
+        
+        #self.image = self.game.arvore.load.image(64,64 ,self.width, self.height) #Arvore BLOCK
 
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -341,15 +365,17 @@ class chao (py.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        self.image = self.game.terreno_spritesheet.get_sprite(64, 362, self.width, self.height) #GRAMA CHAO
+        #self.image = self.game.terreno.load.image(64, 64, self.width, self.ght) #GRAMA CHAO
+        self.image = py.image.load("Terreno/terreno.png")
 
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
 
 class botao:
     def __init__(self, x, y, width, height, fg, bg, content, fontsize):
+        py.font.init()
         self.font = py.font.SysFont('Arial', fontsize)
         self.content = content
 
