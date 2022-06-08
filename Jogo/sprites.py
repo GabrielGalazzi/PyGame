@@ -4,7 +4,7 @@ from math import *
 from random import randint
 
 
-class combate(py.sprite.sprite):
+class combate(py.sprite.Sprite):
     if combate1 == True:
         if import1 == False:
             pstats = personagem.habilidades

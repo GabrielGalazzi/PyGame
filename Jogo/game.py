@@ -8,6 +8,7 @@ import sys
 class Jogo:
     def _init_(self):
         py.init()
+        py.font.init()
         self.screen = py.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = py.time.Clock()
         self.running = True
