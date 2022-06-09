@@ -26,11 +26,10 @@ class Jogo:
                     chao(self, k, i)
                 if column == 'B':
                     block(self, k, i)
-                if column == 'P':
+                if column == 'F':
                     personagem(self, k, i)
                 if column == 'S':
                     inimigo1(self, k, i)
-                ''''''''''''''''dd
                 if column == 'A':
                     inimigo2(self, k, i)
                 if column == 'M':
@@ -43,7 +42,7 @@ class Jogo:
                     inimigo6(self, k, i)
 
                 if column == 'b': #Ponte
-                    if INIMIGO_MORTO <= 1:
+                    if valores.inimigos_derrotados <= 1:
                         py.image.load('./Terreno/ponte_queb_p.png')
                     else:
                         py.image.load('./Terreno/ponte_int_p.png')
@@ -52,11 +51,11 @@ class Jogo:
                 if column == 'd': #Alfandega
                     py.image.load('./Terreno/alfandega_p.png')
                 if column == 'h': #Porta
-                    if INIMIGO_MORTO <= 5: 
+                    if valores.inimigos_derrotados <= 5: 
                         py.image.load('./Terreno/porta_f_p.png')
                     else:
                         py.image.load('./Terreno/porta_a_p.png')
-                '''''
+
           
     def new(self):
         # Define um novo jogo

@@ -5,26 +5,48 @@ from random import randint
 
 
 
-Auxilio1 = False
-Auxilio2 = False
-Auxilio3 = False
-Auxilio4 = False
-Auxilio5 = False
-Auxilio6 = False
+
 class valores(py.sprite.Sprite):
+    inimigos_derrotados = 0
+    if inimigos_derrotados>0:
+        taxadano = 1 * 0.5 *inimigos_derrotados
+    else: 
+        taxadano = 1
+    dano = 15*taxadano
+
+
+    taxamagia = [1, 1.75]
+    magia = [(dano*1.5)*taxamagia[1],0.3]
+    vidaadicional = 100 * inimigos_derrotados
+
+    habilidades = {'vida' : 100 ,'vidamax':100 + vidaadicional, 'forca': dano, 'agilidade': 0}
+
+    magia = {'dano' : magia[0], 'cura': magia[1]}
+    dano_p = float(habilidades['forca'])
+    mdano_p = float(magia['dano'])
+    mcura_p = float(magia['cura'])
+
+    Auxilio1 = False
+    Auxilio2 = False
+    Auxilio3 = False
+    Auxilio4 = False
+    Auxilio5 = False
+    Auxilio6 = False
     irresetavel = False
+
     vida_i = 0
     vida_p = 0
     TURNO = 'personagem'
     vidamax_i = 0
     interrupt = False
+    vivo = True
 
 class auxilio(py.sprite.Sprite):
-    if inimigos_derrotados == 0:
-        dano_p = int(habilidades['forca'])
-        mdano_p = int(magia['dano'])
-        mcura_p = int(magia['cura'])
-        vidamax_p = int(habilidades['vidamax'])
+    if valores.inimigos_derrotados == 0:
+        dano_p = int(valores.habilidades['forca'])
+        mdano_p = int(valores.magia['dano'])
+        mcura_p = int(valores.magia['cura'])
+        vidamax_p = int(valores.habilidades['vidamax'])
         dano_i = 10
         if valores.irresetavel == False:
             valores.vida_p = 100
@@ -32,6 +54,68 @@ class auxilio(py.sprite.Sprite):
             valores.vidamax_i = 150
             valores.TURNO = 'personagem'
             valores.irresetavel = True
+    if valores.inimigos_derrotados == 1:
+        dano_p = int(valores.habilidades['forca'])
+        mdano_p = int(valores.magia['dano'])
+        mcura_p = int(valores.magia['cura'])
+        vidamax_p = int(valores.habilidades['vidamax'])
+        dano_i = 10
+        if valores.irresetavel == False:
+            valores.vida_p = 200
+            valores.vida_i = 180
+            valores.vidamax_i = 180
+            valores.TURNO = 'personagem'
+            valores.irresetavel = True
+    if valores.inimigos_derrotados == 2:
+        dano_p = int(valores.habilidades['forca'])
+        mdano_p = int(valores.magia['dano'])
+        mcura_p = int(valores.magia['cura'])
+        vidamax_p = int(valores.habilidades['vidamax'])
+        dano_i = 15
+        if valores.irresetavel == False:
+            valores.vida_p = 300
+            valores.vida_i = 220
+            valores.vidamax_i = 220
+            valores.TURNO = 'personagem'
+            valores.irresetavel = True
+    if valores.inimigos_derrotados == 4:
+        dano_p = int(valores.habilidades['forca'])
+        mdano_p = int(valores.magia['dano'])
+        mcura_p = int(valores.magia['cura'])
+        vidamax_p = int(valores.habilidades['vidamax'])
+        dano_i = 20
+        if valores.irresetavel == False:
+            valores.vida_p = 275
+            valores.vida_i = 275
+            valores.vidamax_i = 400
+            valores.TURNO = 'personagem'
+            valores.irresetavel = True
+    if valores.inimigos_derrotados == 5:
+        dano_p = int(valores.habilidades['forca'])
+        mdano_p = int(valores.magia['dano'])
+        mcura_p = int(valores.magia['cura'])
+        vidamax_p = int(valores.habilidades['vidamax'])
+        dano_i = 35
+        if valores.irresetavel == False:
+            valores.vida_p = 500
+            valores.vida_i = 300
+            valores.vidamax_i = 150
+            valores.TURNO = 'personagem'
+            valores.irresetavel = True
+    if valores.inimigos_derrotados > 5 :
+        dano_p = int(valores.habilidades['forca'])
+        mdano_p = int(valores.magia['dano'])
+        mcura_p = int(valores.magia['cura'])
+        vidamax_p = int(valores.habilidades['vidamax'])
+        dano_i = 50
+        if valores.irresetavel == False:
+            valores.vida_p = 600
+            valores.vida_i = 500
+            valores.vidamax_i = 500
+            valores.TURNO = 'personagem'
+            valores.irresetavel = True
+       
+            
     def update(self):
         self.game.auxilio()
 
@@ -44,25 +128,30 @@ class combate(py.sprite.Sprite):
         self.game = game
 
         
-        if valores.TURNO == 'personagem' and vivo == True:
-            print('c')
+        if valores.TURNO == 'personagem' and valores.vivo == True:
             event = py.key.get_pressed()
             #nao reconhece evento
             #não consegue editar variaveis
             if event[py.K_d]:
-                print('q')
                 chance = randint(0,100)
                 if chance<=5:
                     valores.vida_i = valores.vida_i
                 else:
-                    valores.vida_i -=  auxilio.mdano_p
+                    valores.vida_i -=  auxilio.dano_p
                     valores.TURNO = 'inimigo'
-            #if ataque[py.K_f]:
+            if event[py.K_w]:
+                chance = randint(0,100)
+                if chance<=5:
+                    valores.vida_i = valores.vida_i
+                    valores.TURNO = 'inimigo'
+                else:
+                    valores.vida_i -= auxilio.mdano_p
+                    valores.TURNO = 'inimigo'
             if event[py.K_a]:
-                print('f')
                 cura = auxilio.vidamax_p * auxilio.mcura_p
                 if cura + auxilio.vidamax_p >= auxilio.vidamax_p:
                    valores.vida_p = auxilio.vidamax_p
+                   valores.TURNO = 'inimigo'
                 else:
                     valores.vida_p += cura
                     valores.TURNO = 'inimigo'
@@ -77,13 +166,26 @@ class combate(py.sprite.Sprite):
             else: 
                 valores.vida_p -= auxilio.dano_i
                 valores.TURNO = 'personagem'
-        elif valores.vida_i<=0:
-            inimigos_derrotados +=1
+        if valores.vida_i<=0:
+            print('j')
+            valores.inimigos_derrotados +=1
             valores.vida_i = valores.vidamax_i
             valores.vida_p = auxilio.vidamax_p
             valores.TURNO = 'personagem'
-            auxilio.vivo =  False
-            valores.irresetavel = False 
+            valores.vivo =  False
+            valores.irresetavel = False
+            if valores.inimigos_derrotados == 0:
+                valores.Auxilio1 = True 
+            if valores.inimigos_derrotados == 1:
+                valores.Auxilio2 = True 
+            if valores.inimigos_derrotados == 2:
+                valores.Auxilio3 = True 
+            if valores.inimigos_derrotados == 3:
+                valores.Auxilio4 = True 
+            if valores.inimigos_derrotados == 4:
+                valores.Auxilio5 = True
+            if valores.inimigos_derrotados == 5:
+                valores.Auxilio6 = True 
              
         print(valores.vida_p)
         if valores.vida_p<=0:
@@ -310,16 +412,15 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                         sprite.rect.x -= PLAYER_SPEED
                 self.game.combate1 = True
-                print(self.game.combate1)
-                if Auxilio1 == False:
+                if valores.Auxilio1 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)#,TURNO, vivo, dano_p, mdano_p, mcura_p, dano_i[0], vidamax_p, vida_p, vida_i[0], vidamax_i[0])
       
                             
         if direcao == 'y':
             hits = py.sprite.spritecollide(self, self.game.inimigo1, False)
             if hits:
-
                 if self.y_change > 0:
                     self.rect.y = hits[0].rect.top - self.rect.height
                     for sprite in self.game.all_sprites:
@@ -329,13 +430,12 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                        sprite.rect.y -= PLAYER_SPEED
                 self.game.combate1 = True
-                if Auxilio1 == False:
+                if valores.Auxilio1 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)#,TURNO, vivo, dano_p, mdano_p, mcura_p, dano_i[0], vidamax_p, vida_p, vida_i[0], vidamax_i[0])
 
-
-    '''''''''''''''''
-    def colisao_inimigo2 (self):
+    def colisao_inimigo2 (self,direcao):
         if direcao == 'x':
             hits = py.sprite.spritecollide(self, self.game.inimigo2, False)
             if hits:
@@ -348,8 +448,9 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                         sprite.rect.x -= PLAYER_SPEED
                 self.game.combate2 = True
-                if Auxilio2 == False:
+                if valores.Auxilio2 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
                             
         if direcao == 'y':
@@ -364,11 +465,12 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                        sprite.rect.y -= PLAYER_SPEED
                 self.game.combate2 = True
-                if Auxilio2 == False:
+                if valores.Auxilio2 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
     
-    def colisao_inimigo3 (self):
+    def colisao_inimigo3 (self,direcao):
         if direcao == 'x':
             hits = py.sprite.spritecollide(self, self.game.inimigo3, False)
             if hits:
@@ -381,8 +483,9 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                         sprite.rect.x -= PLAYER_SPEED
                 self.game.combate3 = True
-                if Auxilio3 == False:
+                if valores.Auxilio3 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
                             
         if direcao == 'y':
@@ -397,11 +500,12 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                        sprite.rect.y -= PLAYER_SPEED
                 self.game.combate3 = True
-                if Auxilio3 == False:
+                if valores.Auxilio3 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
     
-    def colisao_inimigo4 (self):
+    def colisao_inimigo4 (self,direcao):
         if direcao == 'x':
             hits = py.sprite.spritecollide(self, self.game.inimigo4, False)
             if hits:
@@ -414,8 +518,9 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                         sprite.rect.x -= PLAYER_SPEED
                 self.game.combate4 = True
-                if Auxilio4 == False:
+                if valores.Auxilio4 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
                             
         if direcao == 'y':
@@ -430,11 +535,12 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                        sprite.rect.y -= PLAYER_SPEED
                 self.game.combate4 = True
-                if Auxilio4 == False:
+                if valores.Auxilio4 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
 
-    def colisao_inimigo5 (self):
+    def colisao_inimigo5 (self,direcao):
         if direcao == 'x':
             hits = py.sprite.spritecollide(self, self.game.inimigo5, False)
             if hits:
@@ -447,8 +553,9 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                         sprite.rect.x -= PLAYER_SPEED
                 self.game.combate5 = True
-                if Auxilio5 == False:
+                if valores.Auxilio5 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
                             
         if direcao == 'y':
@@ -463,12 +570,13 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                        sprite.rect.y -= PLAYER_SPEED
                 self.game.combate = True
-                if Auxilio15== False:
+                if valores.Auxilio5== False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
 
-    def colisao_inimigo6 (self):
-        hif direcao == 'x':
+    def colisao_inimigo6 (self,direcao):
+        if direcao == 'x':
             hits = py.sprite.spritecollide(self, self.game.inimigo6, False)
             if hits:
                 if self.x_change > 0:
@@ -480,8 +588,9 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                         sprite.rect.x -= PLAYER_SPEED
                 self.game.combate6 = True
-                if Auxilio6 == False:
+                if valores.Auxilio6 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
                             
         if direcao == 'y':
@@ -496,10 +605,11 @@ class personagem (py.sprite.Sprite):
                     for sprite in self.game.all_sprites:
                        sprite.rect.y -= PLAYER_SPEED
                 self.game.combate6 = True
-                if Auxilio6 == False:
+                if valores.Auxilio6 == False:
                     auxilio()
+                    valores.vivo = True
                     combate(self.game)
-    '''
+
     def colisao (self, direcao):
         if direcao == 'x':
             hits = py.sprite.spritecollide(self, self.game.blocks, False)
@@ -527,18 +637,22 @@ class personagem (py.sprite.Sprite):
 
     def update (self):
         self.movimento()
-        #self.colisao_inimigo2()
-        #self.colisao_inimigo3()
-       # self.colisao_inimigo4()
-        #self.colisao_inimigo5()
-       # self.colisao_inimigo6()
-        #self.combate
         self.rect.x += self.x_change
         self.colisao('x')
         self.colisao_inimigo1('x')
+        self.colisao_inimigo2('x')
+        self.colisao_inimigo3('x')
+        self.colisao_inimigo4('x')
+        self.colisao_inimigo5('x')
+        self.colisao_inimigo6('x')
         self.rect.y += self.y_change
         self.colisao('y')
         self.colisao_inimigo1('y')
+        self.colisao_inimigo2('y')
+        self.colisao_inimigo3('y')
+        self.colisao_inimigo4('y')
+        self.colisao_inimigo5('y')
+        self.colisao_inimigo6('y')
         
         self.x_change = 0
         self.y_change = 0
