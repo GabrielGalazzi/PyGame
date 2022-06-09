@@ -4,21 +4,21 @@ from sprites import *
 import sys
 
 
-py.init()
+
 class Jogo:
-    def _init_(self):
+    def __init__(self):
         py.init()
         py.font.init()
         self.screen = py.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = py.time.Clock()
         self.running = True
         self.font = py.font.SysFont('Arial', 32)
-
-        #self.character_spritesheet = spritesheet('Personagem/fafa _sprite.png')
+        #self.character = py.image.load('Personagem/single.png')
+        #self.arvore = py.image.load('Terreno/arvore_pronta.png')
+        #wself.character_spritesheet = spritesheet('Personagem/fafa%20_e.png')
         #self.terreno = py.image.load("./Terreno/terreno.png")
         self.intro_bg = py.image.load('./BGs/introbackground.png')
         self.go_bg = py.image.load('./BGs/gameover.png')
-
     def createTilemap (self):
         for i, row in enumerate(tilemap):
             for k, column in enumerate(row):
@@ -30,6 +30,7 @@ class Jogo:
                     personagem(self, k, i)
                 if column == 'S':
                     inimigo1(self, k, i)
+                ''''''''''''''''dd
                 if column == 'A':
                     inimigo2(self, k, i)
                 if column == 'M':
@@ -40,6 +41,7 @@ class Jogo:
                     inimigo5(self, k, i)
                 if column == 'L':
                     inimigo6(self, k, i)
+
                 if column == 'b': #Ponte
                     if INIMIGO_MORTO <= 1:
                         py.image.load('./Terreno/ponte_queb_p.png')
@@ -49,27 +51,59 @@ class Jogo:
                     py.image.load('./Terreno/boat_p.png')
                 if column == 'd': #Alfandega
                     py.image.load('./Terreno/alfandega_p.png')
-                if column == 'b': #Porta
+                if column == 'h': #Porta
                     if INIMIGO_MORTO <= 5: 
                         py.image.load('./Terreno/porta_f_p.png')
                     else:
                         py.image.load('./Terreno/porta_a_p.png')
-                
+                '''''
+          
     def new(self):
         # Define um novo jogo
         self.playing = True
+        self.combate1 = False
+        self.combate2 = False
+        self.combate3 = False
+        self.combate4 = False
+        self.combate5 = False
+        self.combate6 = False
+
+        if self.combate1 == True:
+            print('a')
+            #combate1 = False
+            numero = inimigo1
+        if self.combate2 == True:
+            #combate1 = False
+            numero = inimigo2
+        if self.combate3 == True:
+            #combate1 = False
+            numero = inimigo3
+        if self.combate4 == True:
+            #combate1 = False
+            numero = inimigo4
+        if self.combate5 == True:
+            #combate1 = False
+            numero = inimigo5
+        if self.combate6 == True:
+            #combate1 = False
+            numero = inimigo6
 
         self.all_sprites = py.sprite.LayeredUpdates()
         self.blocks = py.sprite.LayeredUpdates()
-        self.inimigos = py.sprite.LayeredUpdates()
-        self.ataques = py.sprite.LayeredUpdates()
+        self.inimigo1 = py.sprite.LayeredUpdates()
+        self.inimigo2 = py.sprite.LayeredUpdates()
+        self.inimigo3 = py.sprite.LayeredUpdates()
+        self.inimigo4 = py.sprite.LayeredUpdates()
+        self.inimigo5 = py.sprite.LayeredUpdates()
+        self.inimigo6 = py.sprite.LayeredUpdates()
 
         self.createTilemap()
 
 
-    def eventos (self):
+
+    def event (self):
         # Evento do jogo em loop
-        for evento in py.eventos.get():
+        for evento in py.event.get():
             if evento.type == py.QUIT:
                 self.playing = False
                 self.running = False
@@ -88,7 +122,7 @@ class Jogo:
     def main (self):
         # Loop do jogo
         while self.playing:
-            self.eventos()
+            self.event()
             self.update()
             self.draw()
         self.running = False
@@ -122,10 +156,8 @@ class Jogo:
 
     def intro_screen (self): 
         intro = True
-        py.font.init()
-        self.font = py.font.SysFont('Arial', 32) ## 14
 
-        title = self.font.render('Jogo Projeto PYGAME', True, PRETO) #09
+        title = self.font.render('Jogo Projeto PYGAME', True, PRETO)
         title_rect = title.get_rect(x=10, y=10) 
 
         play_button = botao(10, 50, 100, 50, BRANCO, PRETO, 'Play', 32)
@@ -136,17 +168,17 @@ class Jogo:
                     intro = False
                     self.running = False
 
-        mouse_pos = py.mouse.get_pos()
-        mouse_press = py.mouse.get_pressed
+            mouse_pos = py.mouse.get_pos()
+            mouse_press = py.mouse.get_pressed()
 
-        if play_button.is_pressed(mouse_pos, mouse_press):
-            intro = False
+            if play_button.is_pressed(mouse_pos, mouse_press):
+                intro = False
 
-        self.screen.blit(self.intro_bg, (0,0))
-        self.screen.blit(title, title_rect)
-        self.screen.blit(play_button.image, play_button.rect)
-        self.clock.tick(FPS)
-        py.display.update()
+            self.screen.blit(self.intro_bg, (0,0))
+            self.screen.blit(title, title_rect)
+            self.screen.blit(play_button.image, play_button.rect)
+            self.clock.tick(FPS)
+            py.display.update()
 
 j = Jogo()
 j.intro_screen()
