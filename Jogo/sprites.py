@@ -6,7 +6,7 @@ from random import randint
 
 
 
-class valores(py.sprite.Sprite):
+class valores(py.sprite.Sprite): #aramzena valores de luta
     inimigos_derrotados = 0
     if inimigos_derrotados>0:
         taxadano = 1 * 0.5 *inimigos_derrotados
@@ -41,7 +41,7 @@ class valores(py.sprite.Sprite):
     interrupt = False
     vivo = True
 
-class auxilio(py.sprite.Sprite):
+class auxilio(py.sprite.Sprite): #administra valores, chama, seta, reseta etc
     if valores.inimigos_derrotados == 0:
         dano_p = int(valores.habilidades['forca'])
         mdano_p = int(valores.magia['dano'])
@@ -120,12 +120,11 @@ class auxilio(py.sprite.Sprite):
         self.game.auxilio()
 
 
-class combate(py.sprite.Sprite):
+class combate(py.sprite.Sprite): # processa o combate
     print('yes')
     print('opa')
 
-    def __init__(self,game):#, game, z, vivo, dano_p, mdano_p, mcura_p, dano_i, vidamax_p, vida_p, vida_i, vidamax_i):
-        self.game = game
+    def __init__(self,game):
 
         
         if valores.TURNO == 'personagem' and valores.vivo == True:
@@ -158,7 +157,6 @@ class combate(py.sprite.Sprite):
             
             print(valores.vida_i)      
         elif valores.TURNO == 'inimigo':
-            print('da')
             chance = randint(0,100)
             if chance <= 5:
                 valores.vida_p = valores.vida_p
@@ -167,7 +165,6 @@ class combate(py.sprite.Sprite):
                 valores.vida_p -= auxilio.dano_i
                 valores.TURNO = 'personagem'
         if valores.vida_i<=0:
-            print('j')
             valores.inimigos_derrotados +=1
             valores.vida_i = valores.vidamax_i
             valores.vida_p = auxilio.vidamax_p
@@ -186,17 +183,14 @@ class combate(py.sprite.Sprite):
                 valores.Auxilio5 = True
             if valores.inimigos_derrotados == 5:
                 valores.Auxilio6 = True 
-             
-        print(valores.vida_p)
         if valores.vida_p<=0:
             self.game.playing = False # mandar pra tela de game over dps
-        print (valores.TURNO)
     def update(self):
         self.game.combate()
         
 
 
-class inimigo1(py.sprite.Sprite):
+class inimigo1(py.sprite.Sprite): # imagem inimigo 1
     stats = {'vida' : 150,'vidamax':150, 'forca':10, 'defesa': 5, 'agilidade': 0}
     def __init__(self, game, x, y):
 
@@ -219,7 +213,7 @@ class inimigo1(py.sprite.Sprite):
         self.rect.y = self.y
 
         
-class inimigo2(py.sprite.Sprite):
+class inimigo2(py.sprite.Sprite): # imagem inimigo 2
     def __init__(self, game, x, y):
 
         stats = {'vida' : 180,'vidamax':180, 'forca':10, 'defesa': 5, 'agilidade': 0}
@@ -242,7 +236,7 @@ class inimigo2(py.sprite.Sprite):
         self.rect.y = self.y
 
 
-class inimigo3(py.sprite.Sprite):
+class inimigo3(py.sprite.Sprite): # imagem inimigo 3
     def __init__(self, game, x, y):
 
         stats = {'vida' : 150,'vidamax':150, 'forca':10, 'defesa': 5, 'agilidade': 0}
@@ -265,7 +259,7 @@ class inimigo3(py.sprite.Sprite):
         self.rect.y = self.y
 
 
-class inimigo4(py.sprite.Sprite):
+class inimigo4(py.sprite.Sprite): # imagem inimigo 4
     def __init__(self, game, x, y):
 
         stats = {'vida' : 275,'vidamax':275, 'forca':27, 'defesa': 15, 'agilidade': 5}
@@ -288,7 +282,7 @@ class inimigo4(py.sprite.Sprite):
         self.rect.y = self.y
 
 
-class inimigo5(py.sprite.Sprite):
+class inimigo5(py.sprite.Sprite): # imagem inimigo 5
     def __init__(self, game, x, y):
 
         stats = {'vida' : 300,'vidamax': 300, 'forca':30, 'defesa': 17, 'agilidade': 5}
@@ -310,7 +304,7 @@ class inimigo5(py.sprite.Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
-class inimigo6(py.sprite.Sprite):
+class inimigo6(py.sprite.Sprite): # imagem inimigo 6
     def __init__(self, game, x, y):
 
         stats = {'vida' : 500,'vidamax':500, 'forca':50, 'defesa': 25, 'agilidade': 5}
@@ -333,7 +327,7 @@ class inimigo6(py.sprite.Sprite):
         self.rect.y = self.y
 
 
-class spritesheet:
+class spritesheet: #processa sprites
     def  __init__ (self, file):
         self.sheet = py.image.load(file).convert()
 
@@ -345,7 +339,7 @@ class spritesheet:
 
 
 
-class personagem (py.sprite.Sprite): 
+class personagem (py.sprite.Sprite): #prcessa atividades do personagem, colisoes, andar
 
 
     def __init__ (self, game, x, y):
@@ -658,7 +652,7 @@ class personagem (py.sprite.Sprite):
         self.y_change = 0
 
 
-class block (py.sprite.Sprite):
+class block (py.sprite.Sprite): #define objeto de bloqueio
     def __init__(self, game, x, y):
 
         self.game = game
@@ -681,7 +675,7 @@ class block (py.sprite.Sprite):
         self.rect.y = self.y
 
 
-class chao (py.sprite.Sprite):
+class chao (py.sprite.Sprite): #define o chao de grama
     def __init__(self, game, x, y):
         self.game = game
         self._layer = GROUND_LAYER
@@ -701,7 +695,7 @@ class chao (py.sprite.Sprite):
         self.rect.y = self.y
 
 
-class botao:
+class botao: #botao incial do menu
     def __init__(self, x, y, width, height, fg, bg, content, fontsize):
         py.font.init()
         self.font = py.font.SysFont('Arial', fontsize)
