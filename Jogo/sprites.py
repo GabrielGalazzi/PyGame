@@ -121,9 +121,6 @@ class auxilio(py.sprite.Sprite): #administra valores, chama, seta, reseta etc
 
 
 class combate(py.sprite.Sprite): # processa o combate
-    print('yes')
-    print('opa')
-
     def __init__(self,game):
 
         
@@ -154,8 +151,7 @@ class combate(py.sprite.Sprite): # processa o combate
                 else:
                     valores.vida_p += cura
                     valores.TURNO = 'inimigo'
-            
-            print(valores.vida_i)      
+          
         elif valores.TURNO == 'inimigo':
             chance = randint(0,100)
             if chance <= 5:
@@ -193,8 +189,6 @@ class combate(py.sprite.Sprite): # processa o combate
 class inimigo1(py.sprite.Sprite): # imagem inimigo 1
     stats = {'vida' : 150,'vidamax':150, 'forca':10, 'defesa': 5, 'agilidade': 0}
     def __init__(self, game, x, y):
-
-
 
         self.game = game
         self._layer = ENEMY_LAYER
@@ -357,7 +351,7 @@ class personagem (py.sprite.Sprite): #prcessa atividades do personagem, colisoes
         self.y_change = 0
 
         imagem = py.image.load('Personagem/fafa pronto 8 bits.png')
-        self.image = py.Surface([self.width+20, self.height])
+        self.image = py.Surface([self.width+20, self.height+90])
         self.image.set_colorkey(PRETO)
         self.image.blit(imagem, (0,0))
        # self.image = self.game.character_spritesheet.get_sprite(x, y , self.width, self.height+32)
@@ -391,9 +385,6 @@ class personagem (py.sprite.Sprite): #prcessa atividades do personagem, colisoes
             #self.facing = 'down'
 
     def colisao_inimigo1 (self, direcao):
-        #hits = py.sprite.spritecollide(self, self.game.inimigo1, False)
-        #if hits:
-        #    self.game.combate1 = True
         if direcao == 'x':
             hits = py.sprite.spritecollide(self, self.game.inimigo1, False)
             if hits:
@@ -665,10 +656,7 @@ class block (py.sprite.Sprite): #define objeto de bloqueio
         self.width = TILESIZE
         self.height = TILESIZE
         
-        #self.arvore = py.image.load('Jogo/arvore_pronta.png')
         self.image = py.image.load('Terreno/arvore_pronta.png')
-
-        #self.image = self.game.arvore(0, 0, self.width, self.height) #Arvore BLOCK
 
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -687,7 +675,6 @@ class chao (py.sprite.Sprite): #define o chao de grama
         self.width = TILESIZE
         self.height = TILESIZE
 
-        #self.image = self.game.terreno.load.image(64, 64, self.width, self.ght) #GRAMA CHAO
         self.image = py.image.load("Terreno/terreno2.png")
 
         self.rect = self.image.get_rect()
@@ -695,7 +682,7 @@ class chao (py.sprite.Sprite): #define o chao de grama
         self.rect.y = self.y
 
 
-class botao: #botao incial do menu
+class botao: # cria botoes
     def __init__(self, x, y, width, height, fg, bg, content, fontsize):
         py.font.init()
         self.font = py.font.SysFont('Arial', fontsize)

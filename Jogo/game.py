@@ -13,12 +13,11 @@ class Jogo:
         self.clock = py.time.Clock()
         self.running = True
         self.font = py.font.SysFont('Arial', 32)
-        #self.character = py.image.load('Personagem/single.png')
-        #self.arvore = py.image.load('Terreno/arvore_pronta.png')
-        #wself.character_spritesheet = spritesheet('Personagem/fafa%20_e.png')
-        #self.terreno = py.image.load("./Terreno/terreno.png")
         self.intro_bg = py.image.load('./BGs/introbackground.png')
         self.go_bg = py.image.load('./BGs/gameover.png')
+        self.musicp = py.mixer.music.load('./Musica/8-Bit-Mayhem.wav')
+        self.musicp_v = py.mixer.music.set_volume(0.4)
+
     def createTilemap (self):
         for i, row in enumerate(tilemap):
             for k, column in enumerate(row):
@@ -41,21 +40,6 @@ class Jogo:
                 if column == 'L':
                     inimigo6(self, k, i)
 
-                if column == 'b': #Ponte
-                    if valores.inimigos_derrotados <= 1:
-                        py.image.load('./Terreno/ponte_queb_p.png')
-                    else:
-                        py.image.load('./Terreno/ponte_int_p.png')
-                if column == 'c': #Barco
-                    py.image.load('./Terreno/boat_p.png')
-                if column == 'd': #Alfandega
-                    py.image.load('./Terreno/alfandega_p.png')
-                if column == 'h': #Porta
-                    if valores.inimigos_derrotados <= 5: 
-                        py.image.load('./Terreno/porta_f_p.png')
-                    else:
-                        py.image.load('./Terreno/porta_a_p.png')
-
           
     def new(self):
         # Define um novo jogo
@@ -68,23 +52,16 @@ class Jogo:
         self.combate6 = False
 
         if self.combate1 == True:
-            print('a')
-            #combate1 = False
             numero = inimigo1
         if self.combate2 == True:
-            #combate1 = False
             numero = inimigo2
         if self.combate3 == True:
-            #combate1 = False
             numero = inimigo3
         if self.combate4 == True:
-            #combate1 = False
             numero = inimigo4
         if self.combate5 == True:
-            #combate1 = False
             numero = inimigo5
         if self.combate6 == True:
-            #combate1 = False
             numero = inimigo6
 
         self.all_sprites = py.sprite.LayeredUpdates()
@@ -95,10 +72,9 @@ class Jogo:
         self.inimigo4 = py.sprite.LayeredUpdates()
         self.inimigo5 = py.sprite.LayeredUpdates()
         self.inimigo6 = py.sprite.LayeredUpdates()
+        self.music_play = py.mixer.music.play()
 
         self.createTilemap()
-
-
 
     def event (self):
         # Evento do jogo em loop
@@ -156,7 +132,7 @@ class Jogo:
     def intro_screen (self): 
         intro = True
 
-        title = self.font.render('Jogo Projeto PYGAME', True, PRETO)
+        title = self.font.render('As Fantasticas Aventuras de Fabricio', True, PRETO)
         title_rect = title.get_rect(x=10, y=10) 
 
         play_button = botao(10, 50, 100, 50, BRANCO, PRETO, 'Play', 32)
